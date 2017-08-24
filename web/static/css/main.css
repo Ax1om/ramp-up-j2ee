@@ -1,0 +1,45 @@
+@import "common.css";
+
+/* Table Component */
+
+.table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table__caption {
+    position: relative;
+    padding: 10px;
+    line-height: 25px;
+}
+
+.table__new-employee-btn {
+    position: absolute;
+    right: 10px;
+}
+
+/* Upsert Form Component */
+
+.upsert__fieldset {
+    display: inline;
+    text-align: right;
+}
+
+.upsert__legend {
+    text-align: left;
+}
+
+.upsert__label {
+    display: block;
+    padding: 10px 0;
+}
+
+.upsert__label-text {
+    min-width: 100px;
+    display: inline-block;
+    text-align: right;
+}
+
+.upsert__input {
+    min-width: 180px;
+}

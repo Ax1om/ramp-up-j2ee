@@ -4,11 +4,30 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <servlet>
-        <servlet-name>HelloWorld</servlet-name>
-        <servlet-class>com.nrqapps.j2ee.HelloWorld</servlet-class>
+        <servlet-name>searchServlet</servlet-name>
+        <servlet-class>com.nrqapps.j2ee.controllers.SearchServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>upsertServlet</servlet-name>
+        <servlet-class>com.nrqapps.j2ee.controllers.UpsertServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>deleteServlet</servlet-name>
+        <servlet-class>com.nrqapps.j2ee.controllers.DeleteServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>HelloWorld</servlet-name>
-        <url-pattern></url-pattern>
+        <servlet-name>searchServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>upsertServlet</servlet-name>
+        <url-pattern>/upsert</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>deleteServlet</servlet-name>
+        <url-pattern>/delete</url-pattern>
+    </servlet-mapping>
+    <welcome-file-list>
+        <welcome-file>views/index.jsp</welcome-file>
+    </welcome-file-list>
 </web-app>
