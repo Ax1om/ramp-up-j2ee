@@ -5,6 +5,7 @@
 .table {
     border-collapse: collapse;
     width: 100%;
+    table-layout: fixed;
 }
 
 .table__caption {
@@ -33,7 +34,6 @@
     width: 50%;
 }
 
-
 /* Upsert Form Component */
 
 .upsert__fieldset {
@@ -58,4 +58,37 @@
 
 .upsert__input {
     min-width: 180px;
+}
+
+.upsert__skills {
+    text-align: left;
+}
+
+.upsert__skills-container {
+    width: 300px;
+    min-height: 100px;
+    background: #CCCCCC;
+    border-radius: 5px;
+    border: 1px solid black;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+.upsert__skill {
+    background: white;
+    border: 1px solid #333333;
+    border-radius: 3px;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.upsert__skill-delete {
+    margin-left: 5px;
+    cursor: pointer;
+    color: darkred;
+}
+
+.upsert__buttons-container {
+    margin-top: 10px;
 }

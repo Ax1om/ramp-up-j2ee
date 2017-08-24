@@ -2,6 +2,7 @@ package com.nrqapps.j2ee.utils;
 
 import com.nrqapps.j2ee.models.Employee;
 import com.nrqapps.j2ee.models.MaritalStatus;
+import com.nrqapps.j2ee.models.Skill;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
@@ -25,7 +26,8 @@ public class HibernateUtils {
 
             configuration
                 .addAnnotatedClass(Employee.class)
-                .addAnnotatedClass(MaritalStatus.class);
+                    .addAnnotatedClass(MaritalStatus.class)
+                    .addAnnotatedClass(Skill.class);
             sessionFactory = configuration.buildSessionFactory(serviceRegistry);
         }
 

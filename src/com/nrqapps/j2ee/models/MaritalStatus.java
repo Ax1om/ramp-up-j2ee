@@ -3,7 +3,7 @@ package com.nrqapps.j2ee.models;
 import javax.persistence.*;
 
 /**
- * Created by mauricio on 8/20/17.
+ * Created by Mauricio Enriquez on 8/20/17.
  * NrqApps © 2017
  */
 @Entity

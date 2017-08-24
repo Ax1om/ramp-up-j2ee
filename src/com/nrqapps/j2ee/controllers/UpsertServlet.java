@@ -2,6 +2,7 @@ package com.nrqapps.j2ee.controllers;
 
 import com.nrqapps.j2ee.models.Employee;
 import com.nrqapps.j2ee.models.MaritalStatus;
+import com.nrqapps.j2ee.models.Skill;
 import com.nrqapps.j2ee.utils.HibernateUtils;
 import org.hibernate.Session;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,6 +32,7 @@ public class UpsertServlet extends HttpServlet {
         String country = request.getParameter("country");
         String birthDate = request.getParameter("birthDate");
         String maritalStatusId = request.getParameter("maritalStatusId");
+        String skillsIds = request.getParameter("skillsIds");
 
         Employee employee = new Employee();
 
@@ -46,6 +49,19 @@ public class UpsertServlet extends HttpServlet {
         employee.setName(name);
         employee.setSurname(surname);
         employee.setCountry(country);
+
+        if(skillsIds != null && !skillsIds.equals("")) {
+            String[] skillsIdsArray =   skillsIds.split(",");
+            List<Skill> skills = new ArrayList<>();
+            for (String skillId : skillsIdsArray) {
+                Skill skill = new Skill();
+                skill.setSkillId(Integer.parseInt(skillId));
+                skills.add(skill);
+            }
+            if(skills.size() > 0) {
+                employee.setSkills(skills);
+            }
+        }
 
         try {
             employee.setBirthDate(simpleDateFormat.parse(birthDate));
@@ -87,12 +103,31 @@ public class UpsertServlet extends HttpServlet {
             }
         }
 
-        // retrieve MaritalStatus list with HQL
+        // retrieve MaritalStatus and Skill list with HQL
         List maritalStatusList = session.createQuery("from MaritalStatus").list();
+        List skills = session.createQuery("from Skill").list();
         session.close();
+
+        // creates the array with the skills id format: ['id1', 'id2' , ... ]
+        // here we could use GSON to create a JSONArray and use toString.
+        StringBuilder skillsIdsBuilder = new StringBuilder("[");
+        if (employee.getSkills() != null && employee.getSkills().size() > 0 ) {
+            for (Skill skill : employee.getSkills()) {
+                skillsIdsBuilder
+                        .append("'")
+                        .append(skill.getSkillId()).append("-").append(skill.getName())
+                        .append("'")
+                        .append(",");
+            }
+            // remove last comma
+            skillsIdsBuilder.deleteCharAt(skillsIdsBuilder.length()-1);
+        }
+        skillsIdsBuilder.append("]");
 
         request.setAttribute("employee", employee);
         request.setAttribute("maritalStatusList", maritalStatusList);
+        request.setAttribute("skills", skills);
+        request.setAttribute("skillsIds", skillsIdsBuilder.toString());
         view.forward(request, response);
     }
 }

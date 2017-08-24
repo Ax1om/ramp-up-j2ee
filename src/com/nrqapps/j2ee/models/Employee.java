@@ -3,6 +3,7 @@ package com.nrqapps.j2ee.models;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Mauricio Enriquez on 8/17/17.
@@ -32,6 +33,14 @@ public class Employee implements Serializable {
     @ManyToOne
     @JoinColumn(name = "marital_status_id")
     private MaritalStatus maritalStatus;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "employee_skill",
+        joinColumns = @JoinColumn(name="employee_id", referencedColumnName = "employee_id"),
+        inverseJoinColumns = @JoinColumn(name="skill_id", referencedColumnName = "skill_id")
+    )
+    private List<Skill> skills;
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -79,5 +88,13 @@ public class Employee implements Serializable {
 
     public void setMaritalStatus(MaritalStatus maritalStatus) {
         this.maritalStatus = maritalStatus;
+    }
+
+    public List<Skill> getSkills() {
+        return skills;
+    }
+
+    public void setSkills(List<Skill> skills) {
+        this.skills = skills;
     }
 }
