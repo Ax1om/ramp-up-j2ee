@@ -9,7 +9,7 @@ import java.util.Date;
  * NrqApps © 2017
  */
 @Entity
-@Table (name = "employee")
+@Table(name = "employee")
 public class Employee implements Serializable {
 
     @Id
@@ -28,6 +28,10 @@ public class Employee implements Serializable {
 
     @Column(name = "brith_date")
     private Date birthDate;
+
+    @ManyToOne
+    @JoinColumn(name = "marital_status_id")
+    private MaritalStatus maritalStatus;
 
     public Integer getEmployeeId() {
         return employeeId;
@@ -67,5 +71,13 @@ public class Employee implements Serializable {
 
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public MaritalStatus getMaritalStatus() {
+        return maritalStatus;
+    }
+
+    public void setMaritalStatus(MaritalStatus maritalStatus) {
+        this.maritalStatus = maritalStatus;
     }
 }

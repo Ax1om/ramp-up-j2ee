@@ -28,9 +28,19 @@
                         <span class="upsert__label-text">Birth Date:</span>
                         <input class="upsert__input" name="birthDate" type="date" placeholder="Birth Date" value="<fmt:formatDate pattern="yyyy-MM-dd" value = "${employee.birthDate}" />">
                     </label>
-                    <c:if test="${not empty employee.employeeId}">
-                        <input type="hidden" name="employeeId" value="${employee.employeeId}">
-                    </c:if>
+                    <label class="upsert__label">
+                        <span class="upsert__label-text">Marital Status:</span>
+                        <select class="upsert__input" name="maritalStatusId">
+                            <c:forEach var="maritalStatus" items="${maritalStatusList}">
+                                <option
+                                        value="${maritalStatus.maritalStatusId}"
+                                    ${employee.maritalStatus.status eq maritalStatus.status ? 'selected':''}
+                                >
+                                        ${maritalStatus.status}
+                                </option>
+                            </c:forEach>
+                        </select>
+                    </label>
                     <div>
                         <input class="link-as-button" type="submit" value="Save">
                         <a href="<c:url value="/"/>" class="link-as-button">Cancel</a>
