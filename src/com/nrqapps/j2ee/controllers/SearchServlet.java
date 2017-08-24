@@ -32,8 +32,22 @@ public class SearchServlet extends HttpServlet {
         CriteriaQuery<Employee> criteriaQuery = criteriaBuilder.createQuery(Employee.class);
         Root<Employee> rootEmployee = criteriaQuery.from(Employee.class);
 
+        String query = request.getParameter("query");
+
         criteriaQuery
                 .select(rootEmployee);
+
+        if (query != null && !query.equals("")) {
+            String param = "%" + query + "%";
+            criteriaQuery
+                    .where(
+                            criteriaBuilder.or(
+                                    criteriaBuilder.like(rootEmployee.get("name"), param),
+                                    criteriaBuilder.like(rootEmployee.get("surname"), param),
+                                    criteriaBuilder.like(rootEmployee.get("country"), param)
+                            )
+                    );
+        }
 
         List employees = session.createQuery(criteriaQuery).getResultList();
         session.close();
@@ -43,3 +57,4 @@ public class SearchServlet extends HttpServlet {
 
     }
 }
+

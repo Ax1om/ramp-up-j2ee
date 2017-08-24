@@ -1,11 +1,4 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: mauricio
-  Date: 7/25/17
-  Time: 4:45 PM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -15,6 +8,23 @@
   </head>
   <body>
     <div class="container">
+      <div class="search__container">
+        <form>
+          <fieldset class="search__fieldset">
+            <legend>Search</legend>
+            <label>
+              <input class="search__input" type="text" name="query">
+            </label>
+            <input class="link-as-button" type="submit" value="Search">
+            <c:if test="${not empty param.query}">
+              <div class="search__result">
+                <span>Filtering by: <b>${param.query}</b> </span>
+                <a href="${pageContext.request.contextPath}/">clear</a>
+              </div>
+            </c:if>
+          </fieldset>
+        </form>
+      </div>
       <jsp:include page="/search" />
     </div>
   </body>

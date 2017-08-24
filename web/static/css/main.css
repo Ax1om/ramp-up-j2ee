@@ -18,6 +18,22 @@
     right: 10px;
 }
 
+/* Search Component */
+
+.search__result {
+    text-align: center;
+}
+
+.search__fieldset {
+    text-align: center;
+}
+
+.search__input {
+    margin: 10px;
+    width: 50%;
+}
+
+
 /* Upsert Form Component */
 
 .upsert__fieldset {
