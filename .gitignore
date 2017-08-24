@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+/out
+/.idea/*
+!.idea/artifacts
+!.idea/libraries
+!.idea/modules.xml
+!.idea/misc.xml

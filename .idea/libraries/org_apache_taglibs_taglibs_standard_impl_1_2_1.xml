@@ -1,0 +1,14 @@
+<component name="libraryTable">
+  <library name="org.apache.taglibs:taglibs-standard-impl:1.2.1" type="repository">
+    <properties maven-id="org.apache.taglibs:taglibs-standard-impl:1.2.1" />
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/taglibs-standard-impl-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/taglibs-standard-spec-1.2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/servlet-api-2.5.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/jsp-api-2.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/el-api-1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
