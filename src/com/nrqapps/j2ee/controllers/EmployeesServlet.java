@@ -20,7 +20,7 @@ import java.util.List;
  * NrqApps © 2017
  */
 
-public class SearchServlet extends HttpServlet {
+public class EmployeesServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,20 +40,20 @@ public class SearchServlet extends HttpServlet {
         if (query != null && !query.equals("")) {
             String param = "%" + query + "%";
             criteriaQuery
-                    .where(
-                            criteriaBuilder.or(
-                                    criteriaBuilder.like(rootEmployee.get("name"), param),
-                                    criteriaBuilder.like(rootEmployee.get("surname"), param),
-                                    criteriaBuilder.like(rootEmployee.get("country"), param)
-                            )
-                    );
+                .where(
+                    criteriaBuilder.or(
+                        criteriaBuilder.like(rootEmployee.get("name"), param),
+                        criteriaBuilder.like(rootEmployee.get("surname"), param),
+                        criteriaBuilder.like(rootEmployee.get("country"), param)
+                    )
+                );
         }
 
         List employees = session.createQuery(criteriaQuery).getResultList();
         session.close();
         request.setAttribute("employees", employees);
-        RequestDispatcher view = request.getRequestDispatcher("/views/employees.jsp");
-        view.include(request, response);
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/employees.jsp");
+        view.forward(request, response);
 
     }
 }

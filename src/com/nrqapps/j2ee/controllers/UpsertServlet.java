@@ -90,7 +90,7 @@ public class UpsertServlet extends HttpServlet {
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/views/upsert.jsp");
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/upsert.jsp");
         String employeeId = request.getParameter("employeeId");
         Employee employee = new Employee();
         Session session = HibernateUtils.getSession();
