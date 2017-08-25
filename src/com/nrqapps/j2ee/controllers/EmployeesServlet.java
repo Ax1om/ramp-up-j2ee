@@ -2,6 +2,7 @@ package com.nrqapps.j2ee.controllers;
 
 import com.nrqapps.j2ee.models.Employee;
 import com.nrqapps.j2ee.utils.HibernateUtils;
+import com.nrqapps.j2ee.utils.MessagesUtil;
 import org.hibernate.Session;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -53,6 +54,7 @@ public class EmployeesServlet extends HttpServlet {
         session.close();
         request.setAttribute("employees", employees);
         RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/employees.jsp");
+        MessagesUtil.loadNotifications(request);
         view.forward(request, response);
 
     }

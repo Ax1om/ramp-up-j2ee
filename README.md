@@ -4,6 +4,7 @@ Exercises
  - Task2: Add a filter to the CRUD employee
  - Task3: Add a Marital Status property to Employee as a relationship Many To One
  - Task4: Add a Skill property to Employee as a relationship Many to Many
+ - Task5: Notification System for CRUD operations
  
  ### How to install
 

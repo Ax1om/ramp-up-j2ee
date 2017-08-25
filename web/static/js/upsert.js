@@ -19,7 +19,7 @@
     };
 
     if(skillIds.indexOf(skill.id) > -1) {
-      alert('Skill already added');
+      notifyUser({message: skill.name + ' already added', type: 'warn'});
       return;
     } else {
       skillIds.push(skill.id);

@@ -3,7 +3,10 @@ package com.nrqapps.j2ee.controllers;
 import com.nrqapps.j2ee.models.Employee;
 import com.nrqapps.j2ee.models.MaritalStatus;
 import com.nrqapps.j2ee.models.Skill;
+import com.nrqapps.j2ee.pojos.Notification;
 import com.nrqapps.j2ee.utils.HibernateUtils;
+import com.nrqapps.j2ee.utils.MessagesUtil;
+import com.nrqapps.j2ee.utils.StringUtils;
 import org.hibernate.Session;
 
 import javax.servlet.RequestDispatcher;
@@ -23,6 +26,7 @@ import java.util.List;
  */
 public class UpsertServlet extends HttpServlet {
 
+    @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // this parameter is available from the url, forwarded from GET request.
@@ -36,7 +40,7 @@ public class UpsertServlet extends HttpServlet {
 
         Employee employee = new Employee();
 
-        if ( employeeId != null && !employeeId.equals("")) {
+        if (!StringUtils.isEmpty(employeeId)) {
             try {
                 employee.setEmployeeId(Integer.valueOf(employeeId));
             } catch (NumberFormatException e) {
@@ -50,7 +54,7 @@ public class UpsertServlet extends HttpServlet {
         employee.setSurname(surname);
         employee.setCountry(country);
 
-        if(skillsIds != null && !skillsIds.equals("")) {
+        if(!StringUtils.isEmpty(skillsIds)) {
             String[] skillsIdsArray =   skillsIds.split(",");
             List<Skill> skills = new ArrayList<>();
             for (String skillId : skillsIdsArray) {
@@ -71,7 +75,7 @@ public class UpsertServlet extends HttpServlet {
 
         Session session = HibernateUtils.getSession();
 
-        if ( maritalStatusId != null && !maritalStatusId.equals("")) {
+        if (!StringUtils.isEmpty(maritalStatusId)) {
             try {
                 MaritalStatus maritalStatus = session.get(MaritalStatus.class, Integer.valueOf(maritalStatusId));
                 if (maritalStatus != null ) {
@@ -86,6 +90,9 @@ public class UpsertServlet extends HttpServlet {
         session.saveOrUpdate(employee);
         session.getTransaction().commit();
         session.close();
+
+        String successPropKey = StringUtils.isEmpty(employeeId) ? "crud.insert.success":"crud.update.success";
+        MessagesUtil.setNotification(request, new Notification(Notification.SUCCESS, null, successPropKey));
         response.sendRedirect("/");
     }
 
@@ -100,6 +107,12 @@ public class UpsertServlet extends HttpServlet {
                 employee = session.get(Employee.class, Integer.valueOf(employeeId));
             } catch (NumberFormatException e) {
                 e.printStackTrace();
+                MessagesUtil.setNotification(request, new Notification(Notification.ERROR, null, "error.invalid.id"));
+            } finally {
+                if (employee == null ) {
+                    employee = new Employee();
+                    MessagesUtil.setNotification(request, new Notification(Notification.ERROR, null, "error.notFound.id"));
+                }
             }
         }
 
@@ -128,6 +141,7 @@ public class UpsertServlet extends HttpServlet {
         request.setAttribute("maritalStatusList", maritalStatusList);
         request.setAttribute("skills", skills);
         request.setAttribute("skillsIds", skillsIdsBuilder.toString());
+        MessagesUtil.loadNotifications(request);
         view.forward(request, response);
     }
 }

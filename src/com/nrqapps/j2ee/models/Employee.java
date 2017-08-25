@@ -27,7 +27,7 @@ public class Employee implements Serializable {
     @Column
     private String country;
 
-    @Column(name = "brith_date")
+    @Column(name = "birth_date")
     private Date birthDate;
 
     @ManyToOne

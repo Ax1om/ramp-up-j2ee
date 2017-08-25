@@ -1,9 +1,9 @@
 <%@ taglib prefix="tmpl" tagdir="/WEB-INF/tags/templates" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%--@elvariable id="employees" type="java.util.List"--%>
+<%--@elvariable id="userNotification" type="java.lang.String"--%>
 
-<tmpl:main>
+<tmpl:main><%--@elvariable id="messages" type="java.util.Map"--%>
     <div class="search__container">
         <form>
             <fieldset class="search__fieldset">
