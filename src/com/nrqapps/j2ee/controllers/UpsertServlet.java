@@ -15,9 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -31,73 +29,26 @@ public class UpsertServlet extends HttpServlet {
 
         // this parameter is available from the url, forwarded from GET request.
         String employeeId = request.getParameter("employeeId");
-        String name = request.getParameter("name");
-        String surname = request.getParameter("surname");
-        String country = request.getParameter("country");
-        String birthDate = request.getParameter("birthDate");
-        String maritalStatusId = request.getParameter("maritalStatusId");
-        String skillsIds = request.getParameter("skillsIds");
-
-        Employee employee = new Employee();
-
-        if (!StringUtils.isEmpty(employeeId)) {
-            try {
-                employee.setEmployeeId(Integer.valueOf(employeeId));
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-        }
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        employee.setName(name);
-        employee.setSurname(surname);
-        employee.setCountry(country);
-
-        if(!StringUtils.isEmpty(skillsIds)) {
-            String[] skillsIdsArray =   skillsIds.split(",");
-            List<Skill> skills = new ArrayList<>();
-            for (String skillId : skillsIdsArray) {
-                Skill skill = new Skill();
-                skill.setSkillId(Integer.parseInt(skillId));
-                skills.add(skill);
-            }
-            if(skills.size() > 0) {
-                employee.setSkills(skills);
-            }
-        }
-
-        try {
-            employee.setBirthDate(simpleDateFormat.parse(birthDate));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
         Session session = HibernateUtils.getSession();
-
-        if (!StringUtils.isEmpty(maritalStatusId)) {
-            try {
-                MaritalStatus maritalStatus = session.get(MaritalStatus.class, Integer.valueOf(maritalStatusId));
-                if (maritalStatus != null ) {
-                    employee.setMaritalStatus(maritalStatus);
-                }
-            } catch (NumberFormatException e) {
+        session.beginTransaction();
+        try {
+            session.saveOrUpdate(
+                bindEmployee(request, response)
+            );
+            String successPropKey = StringUtils.isEmpty(employeeId) ? "crud.insert.success":"crud.update.success";
+            MessagesUtil.setNotification(request, new Notification(Notification.SUCCESS, null, successPropKey));
+        } catch (Exception e) {
+            if (!e.getMessage().equals("invalid.employee")) {
                 e.printStackTrace();
             }
         }
-
-        session.beginTransaction();
-        session.saveOrUpdate(employee);
         session.getTransaction().commit();
         session.close();
-
-        String successPropKey = StringUtils.isEmpty(employeeId) ? "crud.insert.success":"crud.update.success";
-        MessagesUtil.setNotification(request, new Notification(Notification.SUCCESS, null, successPropKey));
         response.sendRedirect("/");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/upsert.jsp");
         String employeeId = request.getParameter("employeeId");
         Employee employee = new Employee();
         Session session = HibernateUtils.getSession();
@@ -116,6 +67,15 @@ public class UpsertServlet extends HttpServlet {
             }
         }
 
+        session.close();
+        loadUpsertPage(request, response, employee);
+
+    }
+
+    private void loadUpsertPage(HttpServletRequest request, HttpServletResponse response, Employee employee) throws ServletException, IOException {
+        RequestDispatcher view = request.getRequestDispatcher("/WEB-INF/views/upsert.jsp");
+
+        Session session = HibernateUtils.getSession();
         // retrieve MaritalStatus and Skill list with HQL
         List maritalStatusList = session.createQuery("from MaritalStatus").list();
         List skills = session.createQuery("from Skill").list();
@@ -143,5 +103,71 @@ public class UpsertServlet extends HttpServlet {
         request.setAttribute("skillsIds", skillsIdsBuilder.toString());
         MessagesUtil.loadNotifications(request);
         view.forward(request, response);
+    }
+
+    @SuppressWarnings("unchecked")
+    private Employee bindEmployee(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        Employee employee = new Employee();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        boolean invalidEmployee = false;
+
+        String employeeId = request.getParameter("employeeId");
+        String name = request.getParameter("name");
+        String surname = request.getParameter("surname");
+        String country = request.getParameter("country");
+        String birthDate = request.getParameter("birthDate");
+        String maritalStatusId = request.getParameter("maritalStatusId");
+        String skillsIds = request.getParameter("skillsIds");
+
+        if (!StringUtils.isEmpty(employeeId) && StringUtils.isNaturalNumber(employeeId)) {
+            employee.setEmployeeId(Integer.valueOf(employeeId));
+        }
+
+        if (!StringUtils.isEmpty(name)) {
+            employee.setName(name);
+        } else {
+            MessagesUtil.setMessageFromProp(request, "error_name", "error.validation.empty");
+            invalidEmployee = true;
+        }
+
+        if (!StringUtils.isEmpty(surname)) {
+            employee.setSurname(surname);
+        } else {
+            MessagesUtil.setMessageFromProp(request, "error_surname", "error.validation.empty");
+            invalidEmployee = true;
+        }
+
+        employee.setCountry(country);
+
+        if (!StringUtils.isEmpty(birthDate) && StringUtils.isDateFormated(birthDate)) {
+            employee.setBirthDate(simpleDateFormat.parse(birthDate));
+        } else {
+            MessagesUtil.setMessageFromProp(request, "error_birthDate", "error.validation.date");
+            invalidEmployee = true;
+        }
+
+        Session session = HibernateUtils.getSession();
+
+        if (!StringUtils.isEmpty(maritalStatusId) && StringUtils.isNaturalNumber(maritalStatusId)) {
+            MaritalStatus maritalStatus = session.get(MaritalStatus.class, Integer.valueOf(maritalStatusId));
+            if (maritalStatus != null ) {
+                employee.setMaritalStatus(maritalStatus);
+            }
+        }
+
+        if(!StringUtils.isEmpty(skillsIds)) {
+            List skills =  session.createQuery("from Skill where skillId in (" + skillsIds + ")").getResultList();
+            employee.setSkills(skills);
+        }
+
+        session.close();
+
+        if(invalidEmployee) {
+            MessagesUtil.setNotification(request, new Notification(Notification.ERROR, null, "error.form.invalid"));
+            loadUpsertPage(request, response, employee);
+            throw new Exception("invalid.employee");
+        }
+
+        return employee;
     }
 }

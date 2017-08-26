@@ -4,35 +4,40 @@
 <%--@elvariable id="maritalStatus" type="it.si2001.servlets.models.MaritalStatus"--%>
 <%--@elvariable id="maritalStatusList" type="java.util.List"--%>
 <%--@elvariable id="skills" type="java.util.List"--%>
+<%--@elvariable id="messages" type="java.util.Map"--%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tmpl" tagdir="/WEB-INF/tags/templates" %>
+<%@ taglib prefix="error" tagdir="/WEB-INF/tags/error" %>
 
 
 <tmpl:main>
     <form id="upsert-form" method="post">
         <fieldset class="upsert__fieldset">
             <legend class="upsert__legend">${not empty employee.employeeId ? 'Edit ' : 'Insert '} Employee</legend>
-            <label class="upsert__label">
-                <span class="upsert__label-text">Name:</span>
+            <label class="upsert__label ${not empty messages.get('error_name') ? 'upsert__label--error':''}">
+                <span class="upsert__label-text">Name*:</span>
                 <input class="upsert__input" name="name" type="text" placeholder="Name" value="${employee.name}">
             </label>
-            <label class="upsert__label">
-                <span class="upsert__label-text">Surname:</span>
+            <error:message propertyName="name" />
+            <label class="upsert__label ${not empty messages.get('error_surname') ? 'upsert__label--error':''}">
+                <span class="upsert__label-text">Surname*:</span>
                 <input class="upsert__input" name="surname" type="text" placeholder="Surname"
                        value="${employee.surname}">
             </label>
+            <error:message propertyName="surname" />
             <label class="upsert__label">
                 <span class="upsert__label-text">Country:</span>
                 <input class="upsert__input" name="country" type="text" placeholder="Country"
                        value="${employee.country}">
             </label>
-            <label class="upsert__label">
-                <span class="upsert__label-text">Birth Date:</span>
+            <label class="upsert__label ${not empty messages.get('error_birthDate') ? 'upsert__label--error':''}">
+                <span class="upsert__label-text">Birth Date*:</span>
                 <input class="upsert__input" name="birthDate" type="date" placeholder="Birth Date"
                        value="<fmt:formatDate pattern="yyyy-MM-dd" value = "${employee.birthDate}" />">
             </label>
+            <error:message propertyName="birthDate" />
             <label class="upsert__label">
                 <span class="upsert__label-text">Marital Status:</span>
                 <select class="upsert__input" name="maritalStatusId">

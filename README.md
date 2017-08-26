@@ -5,6 +5,7 @@ Exercises
  - Task3: Add a Marital Status property to Employee as a relationship Many To One
  - Task4: Add a Skill property to Employee as a relationship Many to Many
  - Task5: Notification System for CRUD operations
+ - Task6: Upsert Form Validation server side
  
  ### How to install
 

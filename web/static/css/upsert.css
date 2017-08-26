@@ -12,10 +12,26 @@
     padding: 10px 0;
 }
 
+.upsert__label--error > .upsert__label-text {
+    color: red;
+}
+
+.upsert__label--error > .upsert__input {
+    border: 2px solid red;
+}
+
 .upsert__label-text {
     min-width: 100px;
     display: inline-block;
     text-align: right;
+}
+
+.upsert__error-message {
+    display: inline-block;
+    width: 185px;
+    text-align: left;
+    color: red;
+    font-size: 0.8em;
 }
 
 .upsert__input {

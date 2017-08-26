@@ -42,7 +42,7 @@ public class MessagesUtil {
         saveMessageMap(request, messages);
     }
 
-    private static void setMessageFromProp(HttpServletRequest request, String messageKey, String propKey) {
+    public static void setMessageFromProp(HttpServletRequest request, String messageKey, String propKey) {
         Map<String, Object> messages = getMessagesMap(request);
         messages.put(messageKey, PropertiesUtil.getProp(propKey));
         saveMessageMap(request, messages);
