@@ -34,7 +34,7 @@
             </label>
             <label class="upsert__label ${not empty messages.get('error_birthDate') ? 'upsert__label--error':''}">
                 <span class="upsert__label-text">Birth Date*:</span>
-                <input class="upsert__input" name="birthDate" type="date" placeholder="Birth Date"
+                <input class="upsert__input" name="birthDate" type="date" placeholder="yyyy-MM-dd"
                        value="<fmt:formatDate pattern="yyyy-MM-dd" value = "${employee.birthDate}" />">
             </label>
             <error:message propertyName="birthDate" />
