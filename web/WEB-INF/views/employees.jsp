@@ -2,8 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--@elvariable id="userNotification" type="java.lang.String"--%>
-
-<tmpl:main><%--@elvariable id="messages" type="java.util.Map"--%>
+<%--@elvariable id="employees" type="java.util.List"--%>
+<%--@elvariable id="messages" type="java.util.Map"--%>
+<tmpl:main>
     <div class="search__container">
         <form>
             <fieldset class="search__fieldset">
@@ -61,8 +62,8 @@
 
     <script type="text/javascript">
       function deleteEmployee(employeeId, employeeName) {
-        if(confirm("Are you sure you want to delete " + employeeName + "?")){
-          location.href = "/delete?employeeId=" + employeeId;
+        if(confirm('Are you sure you want to delete ' + employeeName + '?')){
+          location.href = '${pageContext.request.contextPath}/delete?employeeId=' + employeeId;
         }
       }
     </script>
