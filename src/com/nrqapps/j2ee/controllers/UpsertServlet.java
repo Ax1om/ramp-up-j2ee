@@ -11,7 +11,6 @@ import org.hibernate.Session;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,7 +21,7 @@ import java.util.List;
  * Created by Mauricio Enriquez on 8/17/17.
  * NrqApps © 2017
  */
-public class UpsertServlet extends HttpServlet {
+public class UpsertServlet extends BaseServlet {
 
     @SuppressWarnings("unchecked")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,11 +40,15 @@ public class UpsertServlet extends HttpServlet {
         } catch (Exception e) {
             if (!e.getMessage().equals("invalid.employee")) {
                 e.printStackTrace();
+                MessagesUtil.setNotification(request, new Notification(Notification.ERROR, null, "error.generic"));
+            } else {
+                // error parsing employee, we avoid redirect because the request is already handled on bindEmployee
+                return;
             }
         }
         session.getTransaction().commit();
         session.close();
-        response.sendRedirect("/");
+        response.sendRedirect(getHomePageUrl(request));
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

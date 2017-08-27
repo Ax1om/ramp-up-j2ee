@@ -21,7 +21,7 @@ import java.util.List;
  * NrqApps © 2017
  */
 
-public class EmployeesServlet extends HttpServlet {
+public class EmployeesServlet extends BaseServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
